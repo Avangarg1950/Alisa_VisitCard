@@ -4,13 +4,25 @@
     box-sizing: border-box;
 }
 
+:root {
+    --primary-color: #a87c5d;
+    --secondary-color: #6d5d4f;
+    --accent-color: #e2d0be;
+    --text-color: #333;
+    --light-bg: #f9f6f2;
+    --white: #ffffff;
+    --shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    --transition: all 0.3s ease;
+}
+
 body {
     font-family: 'Raleway', sans-serif;
-    color: #333;
+    color: var(--text-color);
     line-height: 1.6;
     overflow-x: hidden;
-    background-color: #f9f6f2;
+    background-color: var(--light-bg);
     position: relative;
+    font-size: 16px;
 }
 
 /* Анимированный фон с частицами */
@@ -130,7 +142,7 @@ body {
     transform: translateY(0);
 }
 
-/* Остальные стили остаются без изменений */
+/* Основные стили */
 h1, h2, h3 {
     font-family: 'Playfair Display', serif;
     font-weight: 700;
@@ -141,43 +153,68 @@ header {
     position: fixed;
     width: 100%;
     z-index: 1000;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(10px);
 }
 
 nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1.5rem 5%;
-    max-width: 1200px;
+    padding: 1rem 5%;
+    max-width: 1920px;
     margin: 0 auto;
 }
 
 .logo {
     font-family: 'Playfair Display', serif;
-    font-size: 2rem;
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
     font-weight: 700;
-    color: #6d5d4f;
+    color: var(--secondary-color);
 }
 
 .nav-links {
     display: flex;
     list-style: none;
+    gap: clamp(1rem, 3vw, 2rem);
 }
 
 .nav-links li {
-    margin-left: 2rem;
+    margin-left: 0;
 }
 
 .nav-links a {
     text-decoration: none;
-    color: #333;
+    color: var(--text-color);
     font-weight: 600;
-    transition: color 0.3s;
+    transition: var(--transition);
+    font-size: clamp(0.9rem, 2vw, 1.1rem);
 }
 
 .nav-links a:hover {
-    color: #a87c5d;
+    color: var(--primary-color);
+}
+
+.hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 30px;
+    height: 25px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 10;
+}
+
+.hamburger span {
+    width: 100%;
+    height: 3px;
+    background-color: var(--secondary-color);
+    border-radius: 5px;
+    transition: var(--transition);
+    transform-origin: center;
 }
 
 .hero {
@@ -186,9 +223,10 @@ nav {
     align-items: center;
     justify-content: center;
     background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('https://placehold.co/1920x1080/6d5d4f/e2d0be?text=Alice+the+Actress!') no-repeat center center/cover;
-    color: white;
+    color: var(--white);
     text-align: center;
     position: relative;
+    padding: 0 5%;
 }
 
 .hero::before {
@@ -205,27 +243,29 @@ nav {
 .hero-content {
     position: relative;
     z-index: 1;
+    max-width: 800px;
 }
 
 .hero-content h1 {
-    font-size: 4rem;
+    font-size: clamp(2.5rem, 8vw, 5rem);
     margin-bottom: 1rem;
+    line-height: 1.2;
 }
 
 .hero-content p {
-    font-size: 1.5rem;
+    font-size: clamp(1.1rem, 3vw, 1.8rem);
     margin-bottom: 2rem;
 }
 
 #tired-btn {
-    background-color: #a87c5d;
-    color: white;
+    background-color: var(--primary-color);
+    color: var(--white);
     border: none;
-    padding: 1rem 2rem;
-    font-size: 1.2rem;
+    padding: clamp(0.8rem, 2vw, 1rem) clamp(1.5rem, 4vw, 2rem);
+    font-size: clamp(1rem, 2.5vw, 1.3rem);
     border-radius: 30px;
     cursor: pointer;
-    transition: all 0.3s;
+    transition: var(--transition);
     position: relative;
     z-index: 2;
 }
@@ -237,55 +277,58 @@ nav {
 }
 
 section {
-    padding: 5rem 5%;
+    padding: clamp(3rem, 8vw, 6rem) 5%;
     max-width: 1200px;
     margin: 0 auto;
 }
 
 section h2 {
     text-align: center;
-    font-size: 2.5rem;
-    margin-bottom: 3rem;
-    color: #6d5d4f;
+    font-size: clamp(2rem, 5vw, 3rem);
+    margin-bottom: clamp(2rem, 5vw, 3rem);
+    color: var(--secondary-color);
 }
 
 .about-content {
     display: flex;
     align-items: center;
-    gap: 3rem;
+    gap: clamp(2rem, 5vw, 4rem);
+    flex-wrap: wrap;
 }
 
 .about-text {
     flex: 1;
+    min-width: 300px;
 }
 
 .about-text p {
     margin-bottom: 1.5rem;
-    font-size: 1.1rem;
+    font-size: clamp(1rem, 2vw, 1.1rem);
 }
 
 .about-image {
     flex: 1;
+    min-width: 300px;
 }
 
 .about-image img {
     width: 100%;
     border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--shadow);
 }
 
 .film-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+    gap: clamp(1.5rem, 4vw, 2.5rem);
 }
 
 .film-card {
-    background: white;
+    background: var(--white);
     border-radius: 10px;
     overflow: hidden;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
 }
 
 .film-card:hover {
@@ -299,55 +342,65 @@ section h2 {
 }
 
 .film-info {
-    padding: 1.5rem;
+    padding: clamp(1rem, 3vw, 1.5rem);
 }
 
 .film-info h3 {
     margin-bottom: 0.5rem;
-    color: #6d5d4f;
+    color: var(--secondary-color);
+    font-size: clamp(1.2rem, 3vw, 1.5rem);
+}
+
+.film-info p {
+    font-size: clamp(0.9rem, 2vw, 1rem);
 }
 
 .contact {
     text-align: center;
     background-color: #f2ebe6;
     border-radius: 10px;
-    padding: 4rem 2rem;
+    padding: clamp(2rem, 6vw, 4rem) clamp(1rem, 4vw, 2rem);
 }
 
 .contact p {
     margin-bottom: 2rem;
-    font-size: 1.2rem;
+    font-size: clamp(1rem, 2.5vw, 1.2rem);
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .social-links {
     display: flex;
     justify-content: center;
-    gap: 1.5rem;
+    gap: clamp(1rem, 3vw, 1.5rem);
+    flex-wrap: wrap;
 }
 
 .social-link {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 60px;
-    height: 60px;
-    background-color: #6d5d4f;
-    color: white;
+    width: clamp(50px, 10vw, 60px);
+    height: clamp(50px, 10vw, 60px);
+    background-color: var(--secondary-color);
+    color: var(--white);
     border-radius: 50%;
-    font-size: 1.5rem;
-    transition: all 0.3s;
+    font-size: clamp(1.2rem, 3vw, 1.5rem);
+    transition: var(--transition);
 }
 
 .social-link:hover {
-    background-color: #a87c5d;
+    background-color: var(--primary-color);
     transform: translateY(-5px);
 }
 
 footer {
     text-align: center;
-    padding: 2rem;
-    background-color: #6d5d4f;
-    color: white;
+    padding: clamp(1.5rem, 4vw, 2rem);
+    background-color: var(--secondary-color);
+    color: var(--white);
+    font-size: clamp(0.9rem, 2vw, 1rem);
 }
 
 /* Анимация для кнопки "Устал" */
@@ -360,22 +413,183 @@ footer {
     overflow: hidden;
 }
 
-/* Адаптивность */
+/* Адаптивность для разных устройств */
+
+/* Мобильные устройства (до 768px) */
 @media (max-width: 768px) {
+    .hamburger {
+        display: flex;
+    }
+    
+    .nav-links {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        height: 100vh;
+        width: 70%;
+        max-width: 300px;
+        background: var(--white);
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        transition: var(--transition);
+        box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+        z-index: 999;
+    }
+    
+    .nav-links.active {
+        right: 0;
+    }
+    
+    .hamburger.active span:nth-child(1) {
+        transform: rotate(45deg) translate(5px, 5px);
+    }
+    
+    .hamburger.active span:nth-child(2) {
+        opacity: 0;
+    }
+    
+    .hamburger.active span:nth-child(3) {
+        transform: rotate(-45deg) translate(7px, -6px);
+    }
+    
     .about-content {
         flex-direction: column;
     }
     
-    .nav-links {
-        display: none;
-    }
-    
-    .hero-content h1 {
-        font-size: 3rem;
+    .hero {
+        text-align: center;
+        padding: 0 1rem;
     }
     
     .particle {
-        display: none; /* Скрываем частицы на мобильных для производительности */
+        display: none;
+    }
+    
+    .film-image img {
+        height: 300px;
+    }
+}
+
+/* Планшеты (769px - 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+    nav {
+        padding: 1rem 3%;
+    }
+    
+    section {
+        padding: 4rem 3%;
+    }
+    
+    .hero-content h1 {
+        font-size: 3.5rem;
+    }
+    
+    .about-content {
+        gap: 2rem;
+    }
+}
+
+/* Ноутбуки (1025px - 1440px) */
+@media (min-width: 1025px) and (max-width: 1440px) {
+    nav {
+        padding: 1.5rem 4%;
+    }
+    
+    section {
+        padding: 5rem 4%;
+        max-width: 1100px;
+    }
+}
+
+/* Большие экраны и телевизоры (1441px и больше) */
+@media (min-width: 1441px) {
+    body {
+        font-size: 18px;
+    }
+    
+    nav {
+        padding: 2rem 5%;
+        max-width: 2000px;
+    }
+    
+    section {
+        padding: 6rem 5%;
+        max-width: 1600px;
+    }
+    
+    .hero-content h1 {
+        font-size: 6rem;
+    }
+    
+    .hero-content p {
+        font-size: 2.2rem;
+    }
+    
+    .film-grid {
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 3rem;
+    }
+    
+    .about-content, .film-grid, .contact {
+        transform: scale(1.05);
+    }
+}
+
+/* Особые адаптации для очень маленьких устройств */
+@media (max-width: 360px) {
+    .hero-content h1 {
+        font-size: 2rem;
+    }
+    
+    .hero-content p {
+        font-size: 1rem;
+    }
+    
+    #tired-btn {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.9rem;
+    }
+    
+    .about-text, .about-image {
+        min-width: 100%;
+    }
+    
+    .social-link {
+        width: 45px;
+        height: 45px;
+        font-size: 1.1rem;
+    }
+}
+
+/* Портретная ориентация */
+@media (max-height: 600px) and (orientation: portrait) {
+    .hero {
+        height: auto;
+        min-height: 100vh;
+        padding: 6rem 1rem 2rem;
+    }
+    
+    .hero-content h1 {
+        margin-bottom: 0.5rem;
+    }
+    
+    .hero-content p {
+        margin-bottom: 1rem;
+    }
+}
+
+/* Ландшафтная ориентация */
+@media (max-height: 500px) and (orientation: landscape) {
+    .hero {
+        height: auto;
+        min-height: 100vh;
+        padding: 5rem 1rem 2rem;
+    }
+    
+    .hero-content h1 {
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
     }
 }
 
@@ -386,4 +600,59 @@ footer {
 
 .gyro-mode * {
     transform-style: preserve-3d;
+}
+
+/* Улучшение доступности */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+    
+    .particle {
+        display: none;
+    }
+}
+
+/* Высококонтрастный режим */
+@media (prefers-contrast: high) {
+    :root {
+        --text-color: #000;
+        --primary-color: #5a3927;
+        --secondary-color: #3a2e25;
+    }
+    
+    .hero {
+        background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://placehold.co/1920x1080/6d5d4f/e2d0be?text=Alice+Actress') no-repeat center center/cover;
+    }
+}
+
+/* Темный режим */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --text-color: #f0f0f0;
+        --light-bg: #1a1a1a;
+    }
+    
+    body {
+        background-color: var(--light-bg);
+        color: var(--text-color);
+    }
+    
+    header {
+        background-color: rgba(26, 26, 26, 0.95);
+    }
+    
+    .nav-links a {
+        color: var(--text-color);
+    }
+    
+    .film-card {
+        background: #2a2a2a;
+    }
+    
+    .contact {
+        background-color: #2a2a2a;
+    }
 }

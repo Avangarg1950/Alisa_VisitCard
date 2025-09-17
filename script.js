@@ -1,7 +1,11 @@
 document.addEventListener('DOMContentLoaded', function() {
     const tiredBtn = document.getElementById('tired-btn');
+    const hamburger = document.createElement('div');
     let fallMode = false;
     let gyroMode = false;
+    
+    // Создаем гамбургер меню
+    createHamburgerMenu();
     
     // Создаем анимированный фон с частицами
     createParticles();
@@ -19,47 +23,9 @@ document.addEventListener('DOMContentLoaded', function() {
     // Обработчик кнопки "Устал"
     tiredBtn.addEventListener('click', function() {
         if (!fallMode) {
-            // Активируем режим падения
-            document.body.classList.add('fall-mode');
-            
-            // Заставляем все элементы "упасть"
-            const allElements = document.querySelectorAll('*');
-            allElements.forEach(el => {
-                if (el !== document.body && el !== document.documentElement && !el.classList.contains('particle')) {
-                    const randomRotate = Math.random() * 20 - 10;
-                    const randomTranslateX = Math.random() * 100 - 50;
-                    const randomTranslateY = Math.random() * 100 + 100;
-                    
-                    el.style.transform = `rotate(${randomRotate}deg) translate(${randomTranslateX}px, ${randomTranslateY}px)`;
-                    el.style.opacity = '0.8';
-                }
-            });
-            
-            tiredBtn.textContent = 'Вернуть';
-            fallMode = true;
-            
-            // Проверяем поддержку гироскопа и активируем его
-            if (window.DeviceOrientationEvent) {
-                gyroMode = true;
-                window.addEventListener('deviceorientation', handleOrientation);
-            }
+            activateFallMode();
         } else {
-            // Деактивируем режим падения
-            document.body.classList.remove('fall-mode');
-            
-            // Возвращаем элементы на место
-            const allElements = document.querySelectorAll('*');
-            allElements.forEach(el => {
-                el.style.transform = '';
-                el.style.opacity = '';
-            });
-            
-            tiredBtn.textContent = 'Устал';
-            fallMode = false;
-            gyroMode = false;
-            
-            // Удаляем обработчик гироскопа
-            window.removeEventListener('deviceorientation', handleOrientation);
+            deactivateFallMode();
         }
     });
     
@@ -96,6 +62,12 @@ document.addEventListener('DOMContentLoaded', function() {
             
             const targetElement = document.querySelector(targetId);
             if (targetElement) {
+                // Закрываем меню если открыто на мобильном
+                if (window.innerWidth <= 768) {
+                    document.querySelector('.nav-links').classList.remove('active');
+                    document.querySelector('.hamburger').classList.remove('active');
+                }
+                
                 window.scrollTo({
                     top: targetElement.offsetTop - 100,
                     behavior: 'smooth'
@@ -104,24 +76,56 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
+    // Функция создания гамбургер меню
+    function createHamburgerMenu() {
+        hamburger.className = 'hamburger';
+        hamburger.innerHTML = '<span></span><span></span><span></span>';
+        
+        const nav = document.querySelector('nav');
+        nav.appendChild(hamburger);
+        
+        hamburger.addEventListener('click', function() {
+            this.classList.toggle('active');
+            document.querySelector('.nav-links').classList.toggle('active');
+            
+            // Блокируем прокрутку при открытом меню
+            if (this.classList.contains('active')) {
+                document.body.style.overflow = 'hidden';
+            } else {
+                document.body.style.overflow = '';
+            }
+        });
+        
+        // Закрытие меню при клике на ссылку
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', function() {
+                hamburger.classList.remove('active');
+                document.querySelector('.nav-links').classList.remove('active');
+                document.body.style.overflow = '';
+            });
+        });
+    }
+    
     // Функция создания частиц для фона
     function createParticles() {
-        const bgContainer = document.createElement('div');
-        bgContainer.className = 'animated-bg';
-        
-        // Создаем 8 частиц (уже есть в CSS, добавляем в DOM)
-        for (let i = 1; i <= 8; i++) {
-            const particle = document.createElement('div');
-            particle.className = `particle particle-${i}`;
-            bgContainer.appendChild(particle);
+        // Создаем частицы только для устройств с достаточной производительностью
+        if (window.innerWidth > 768 && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            const bgContainer = document.createElement('div');
+            bgContainer.className = 'animated-bg';
+            
+            for (let i = 1; i <= 8; i++) {
+                const particle = document.createElement('div');
+                particle.className = `particle particle-${i}`;
+                bgContainer.appendChild(particle);
+            }
+            
+            document.body.appendChild(bgContainer);
         }
-        
-        document.body.appendChild(bgContainer);
     }
     
     // Функция для анимации появления элементов при прокрутке
     function initScrollAnimation() {
-        const elementsToAnimate = document.querySelectorAll('.about-content, .film-grid, .contact');
+        const elementsToAnimate = document.querySelectorAll('.about-content, .film-grid, .contact, .film-card');
         
         elementsToAnimate.forEach(el => {
             el.classList.add('fade-in');
@@ -141,5 +145,65 @@ document.addEventListener('DOMContentLoaded', function() {
         // Проверяем при загрузке и при прокрутке
         checkScroll();
         window.addEventListener('scroll', checkScroll);
+    }
+    
+    // Функция активации режима падения
+    function activateFallMode() {
+        document.body.classList.add('fall-mode');
+        
+        const allElements = document.querySelectorAll('*');
+        allElements.forEach(el => {
+            if (el !== document.body && el !== document.documentElement && !el.classList.contains('particle')) {
+                const randomRotate = Math.random() * 20 - 10;
+                const randomTranslateX = Math.random() * 100 - 50;
+                const randomTranslateY = Math.random() * 100 + 100;
+                
+                el.style.transform = `rotate(${randomRotate}deg) translate(${randomTranslateX}px, ${randomTranslateY}px)`;
+                el.style.opacity = '0.8';
+            }
+        });
+        
+        tiredBtn.textContent = 'Вернуть';
+        fallMode = true;
+        
+        if (window.DeviceOrientationEvent) {
+            gyroMode = true;
+            window.addEventListener('deviceorientation', handleOrientation);
+        }
+    }
+    
+    // Функция деактивации режима падения
+    function deactivateFallMode() {
+        document.body.classList.remove('fall-mode');
+        
+        const allElements = document.querySelectorAll('*');
+        allElements.forEach(el => {
+            el.style.transform = '';
+            el.style.opacity = '';
+        });
+        
+        tiredBtn.textContent = 'Устал';
+        fallMode = false;
+        gyroMode = false;
+        
+        window.removeEventListener('deviceorientation', handleOrientation);
+    }
+    
+    // Обработчик изменения размера окна
+    window.addEventListener('resize', function() {
+        // Закрываем меню при изменении размера на большой экран
+        if (window.innerWidth > 768) {
+            document.querySelector('.nav-links').classList.remove('active');
+            document.querySelector('.hamburger').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+    });
+    
+    // Обработчик для устройств с сенсорным экраном
+    if ('ontouchstart' in window) {
+        document.documentElement.classList.add('touch-device');
+        
+        // Улучшаем обработку hover для touch-устройств
+        document.addEventListener('touchstart', function() {}, {passive: true});
     }
 });
